@@ -249,6 +249,56 @@ void resize_mesh (Mesh& mesh)
 
 void render_mesh (const Mesh& mesh)
 {
+/*
+	glBegin (GL_POINTS);
+
+	for (int i = 0; i < mesh.numero_face; ++i)
+	{
+		glVertex3f(
+			mesh.list_vertex[mesh.list_faces[i].vertex_1].x,
+			mesh.list_vertex[mesh.list_faces[i].vertex_1].y,
+			mesh.list_vertex[mesh.list_faces[i].vertex_1].z
+			); //vertex_1
+
+		glVertex3f(
+			mesh.list_vertex[mesh.list_faces[i].vertex_2].x,
+			mesh.list_vertex[mesh.list_faces[i].vertex_2].y,
+			mesh.list_vertex[mesh.list_faces[i].vertex_2].z
+			); //vertex_2
+
+		glVertex3f(
+			mesh.list_vertex[mesh.list_faces[i].vertex_2].x,
+			mesh.list_vertex[mesh.list_faces[i].vertex_2].y,
+			mesh.list_vertex[mesh.list_faces[i].vertex_2].z
+			); //vertex_2
+
+		glVertex3f(
+			mesh.list_vertex[mesh.list_faces[i].vertex_3].x,
+			mesh.list_vertex[mesh.list_faces[i].vertex_3].y,
+			mesh.list_vertex[mesh.list_faces[i].vertex_3].z
+			); //vertex_3
+
+		glVertex3f(
+			mesh.list_vertex[mesh.list_faces[i].vertex_3].x,
+			mesh.list_vertex[mesh.list_faces[i].vertex_3].y,
+			mesh.list_vertex[mesh.list_faces[i].vertex_3].z
+			); //vertex_3
+
+		glVertex3f(
+			mesh.list_vertex[mesh.list_faces[i].vertex_1].x,
+			mesh.list_vertex[mesh.list_faces[i].vertex_1].y,
+			mesh.list_vertex[mesh.list_faces[i].vertex_1].z
+			); //vertex_1
+
+		glNormal3f(
+			mesh.list_faces[i].normal_x,
+			mesh.list_faces[i].normal_y,
+			mesh.list_faces[i].normal_z
+			); //normal
+	}
+	glEnd();
+*/
+
 	glBegin (GL_TRIANGLES);
 
 	for (int i = 0; i < mesh.numero_face; ++i)
@@ -264,37 +314,20 @@ void render_mesh (const Mesh& mesh)
 			mesh.list_vertex[mesh.list_faces[i].vertex_2].y,
 			mesh.list_vertex[mesh.list_faces[i].vertex_2].z
 			); //vertex_2
-/*
-		glVertex3f(
-			mesh.list_vertex[mesh.list_faces[i].vertex_2].x,
-			mesh.list_vertex[mesh.list_faces[i].vertex_2].y,
-			mesh.list_vertex[mesh.list_faces[i].vertex_2].z
-			); //vertex_2
 
 		glVertex3f(
 			mesh.list_vertex[mesh.list_faces[i].vertex_3].x,
 			mesh.list_vertex[mesh.list_faces[i].vertex_3].y,
 			mesh.list_vertex[mesh.list_faces[i].vertex_3].z
 			); //vertex_3
-*/
-		glVertex3f(
-			mesh.list_vertex[mesh.list_faces[i].vertex_3].x,
-			mesh.list_vertex[mesh.list_faces[i].vertex_3].y,
-			mesh.list_vertex[mesh.list_faces[i].vertex_3].z
-			); //vertex_3
-/*
-		glVertex3f(
-			mesh.list_vertex[mesh.list_faces[i].vertex_1].x,
-			mesh.list_vertex[mesh.list_faces[i].vertex_1].y,
-			mesh.list_vertex[mesh.list_faces[i].vertex_1].z
-			); //vertex_1
-*/
+
 		glNormal3f(
 			mesh.list_faces[i].normal_x,
 			mesh.list_faces[i].normal_y,
 			mesh.list_faces[i].normal_z
 			); //normal
 	}
+
 	glEnd();
 
 	return ;

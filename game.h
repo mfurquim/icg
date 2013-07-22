@@ -7,6 +7,7 @@
 
 #include "timer.h"
 #include "mesh.h"
+#include "camera.h"
 
 class Game {
 
@@ -28,6 +29,9 @@ private:
 	float SCREEN_RATIO;
 	float FRAME_MILISECONDS;
 
+	float angulo;
+	GLfloat light_position[4];
+
 	int flags;
 	Timer frame_time;
 	SDL_Event event;
@@ -37,6 +41,8 @@ private:
 
 	string bunny_file_name;
 	Mesh* bunny_mesh;
+
+	Camera* cam;
 
 	/*Used in Game Loop*/
 	void load_game_resources ();
@@ -76,8 +82,8 @@ private:
 	/*End Handle Event Keydown*/
 
 	/*Used in Render*/
-	int check_if_skip ();/*
-	void Mesh::render_mesh (Mesh& mesh)*/
+	int check_if_skip ();
+/*	void Mesh::render_mesh (Mesh& mesh)*/
 	/*End Render*/
 
 	/*Used in Check If Skip

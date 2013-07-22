@@ -41,7 +41,7 @@ typedef struct{
 }Mesh;
 
 Mesh* new_mesh ();
-void del_mesh (Mesh& mesh);
+void del_mesh (Mesh* mesh);
 int load_mesh (Mesh& mesh, const string& file_name);
 void render_mesh (const Mesh& mesh);
 void resize_mesh (Mesh& mesh);

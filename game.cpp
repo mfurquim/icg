@@ -1,6 +1,7 @@
 #include "game.h"
 #include "mesh.h"
 #include "timer.h"
+#include <iostream>
 
 Game::Game ()
 {
@@ -51,8 +52,42 @@ Game::init ()
 	glMatrixMode (GL_PROJECTION);
 	glLoadIdentity ();
 
+	GLdouble left	= -1.0;
+	GLdouble right	= +1.0;
+	GLdouble bottom	= -1.0;
+	GLdouble top	= +1.0;
+	GLdouble zNear	= 1.0;
+	GLdouble zFar	= 3.0;
+
+	float eye_x		= 0.0;
+	float eye_y		= 0.0;
+	float eye_z		= 1.0;
+	float center_x	= 0.0;
+	float center_y	= 0.0;
+	float center_z	= 0.0;
+	float up_x		= 0.0;
+	float up_y		= 1.0;
+	float up_z		= 0.0;
+
+	glFrustum (left, right, bottom, top, zNear, zFar);
+
 	glMatrixMode (GL_MODELVIEW);
 	glLoadIdentity ();
+
+	gluLookAt (
+		eye_x, eye_y, eye_z,
+		center_x, center_y, center_z,
+		up_x, up_y, up_z
+		);
+
+	glEnable (GL_DEPTH_TEST);
+	glEnable (GL_LIGHTING);
+	glEnable (GL_LIGHT0);
+
+	GLfloat specular[] = {1.0, 1.0, 1.0, 1.0};
+	GLfloat position[] = {-1.5, 1.0, -4.0, 1.0};
+	glLightfv (GL_LIGHT0, GL_SPECULAR, specular);
+	glLightfv (GL_LIGHT0, GL_POSITION, position);
 
 	GLenum error = glGetError ();
 	if (error != GL_NO_ERROR)
@@ -107,6 +142,7 @@ Game::is_game_finished ()
 void
 Game::update_time_step ()
 {
+	check_if_skip ();
 	this->frame_time.start ();
 
 	return ;
@@ -158,6 +194,16 @@ Game::handle_event_type (SDL_Event& event)
 void
 Game::handle_event_keydown (SDL_Event& event)
 {
+	if (is_game_paused ())
+	{
+		if (event.key.keysym.sym == SDLK_p)
+		{
+			unpausing_game ();
+		}
+
+		return ;
+	}
+
 	switch (event.key.keysym.sym)
 	{
 	case (SDLK_ESCAPE):
@@ -165,22 +211,11 @@ Game::handle_event_keydown (SDL_Event& event)
 		break;
 
 	case (SDLK_q):
-		if (is_game_paused ())
-		{
-			break;
-		}
 		this->quit_game = true;
 		break;
 
 	case (SDLK_p):
-		if (is_game_paused ())
-		{
-			unpausing_game ();
-		}
-		else
-		{
-			pausing_game ();
-		}
+		pausing_game ();
 		break;
 	}
 
@@ -218,6 +253,11 @@ Game::run_physics ()
 void
 Game::update ()
 {
+	if (is_game_paused ())
+	{
+		return ;
+	}
+
 	return ;
 }
 
@@ -251,7 +291,7 @@ Game::check_if_skip ()
 void
 Game::release_game_resources ()
 {
-//	del_mesh (*this->bunny_mesh);
+	del_mesh (this->bunny_mesh);
 
 	return ;
 }
