@@ -7,6 +7,7 @@
 
 #include "timer.h"
 #include "mesh.h"
+#include "map.h"
 #include "camera.h"
 
 class Game {
@@ -29,9 +30,6 @@ private:
 	float SCREEN_RATIO;
 	float FRAME_MILISECONDS;
 
-	float angulo;
-	GLfloat light_position[4];
-
 	int flags;
 	Timer frame_time;
 	SDL_Event event;
@@ -42,7 +40,9 @@ private:
 	string bunny_file_name;
 	Mesh* bunny_mesh;
 
-	Camera* cam;
+	string mapa_file_name;
+	Map *mapa;
+
 
 	/*Used in Game Loop*/
 	void load_game_resources ();

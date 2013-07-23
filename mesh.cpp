@@ -56,83 +56,79 @@ int load_mesh (Mesh& mesh, const string& file_name)
 	off = strdup ("OFF");
 	coff = strdup ("COFF");
 
-	if (file_stream.is_open())
+	if (!file_stream.is_open())
 	{
-		file_stream >> type_file;
-
-		if (strcmp (off, type_file.c_str()) == 0)
-		{
-			int_type_file = FILE_OFF;
-//			cout << "Type file: " << int_type_file << endl;
-		}
-		else if (strcmp (coff, type_file.c_str()) == 0)
-		{
-			int_type_file = FILE_COFF;
-//			cout << "Type file: " << int_type_file << endl;
-		} else
-		{
-			cout << "Something wrong with type of file" << endl;
-		}
-
-		file_stream >> mesh.numero_vertex;
-		file_stream >> mesh.numero_face;
-		file_stream >> dummy;
-
-		mesh.numero_color = mesh.numero_vertex;
-/*
-		cout << "Número de vertex: " << mesh.numero_vertex << "\t";
-		cout << "Número de faces: " << mesh.numero_face << "\t";
-		cout << "Dummy: " << dummy << endl;
-*/
-		mesh.list_vertex = (Vertex *) malloc (sizeof (Vertex) * mesh.numero_vertex);
-		mesh.list_faces = (Face *) malloc (sizeof (Face) * mesh.numero_face);
-
-		if (int_type_file == FILE_COFF)
-		{
-			mesh.list_color = (Color *) malloc (sizeof (Color) * mesh.numero_color);
-			
-			for (int i = 0; i < mesh.numero_vertex; ++i)
-			{
-				file_stream >> mesh.list_vertex[i].x;
-				file_stream >> mesh.list_vertex[i].y;
-				file_stream >> mesh.list_vertex[i].z;
-
-				file_stream >> mesh.list_color[i].red;
-				file_stream >> mesh.list_color[i].green;
-				file_stream >> mesh.list_color[i].blue;
-
-				file_stream >> dummy;
-			}
-			
-			for (int i = 0; i < mesh.numero_face; ++i)
-			{
-				file_stream >> dummy;
-				
-				file_stream >> mesh.list_faces[i].vertex_1;
-				file_stream >> mesh.list_faces[i].vertex_2;
-				file_stream >> mesh.list_faces[i].vertex_3;
-			}
-		}
-		else
-		{
-			for (int i = 0; i < mesh.numero_vertex; ++i)
-			{
-				file_stream >> mesh.list_vertex[i].x;
-				file_stream >> mesh.list_vertex[i].y;
-				file_stream >> mesh.list_vertex[i].z;
-			}
-
-			for (int i = 0; i < mesh.numero_face; ++i)
-			{
-				file_stream >> dummy;
-				
-				file_stream >> mesh.list_faces[i].vertex_1;
-				file_stream >> mesh.list_faces[i].vertex_2;
-				file_stream >> mesh.list_faces[i].vertex_3;
-			}
-		}
-		file_stream.close();
+		return -1;
 	}
+
+	file_stream >> type_file;
+
+	if (strcmp (off, type_file.c_str()) == 0)
+	{
+		int_type_file = FILE_OFF;
+	}
+	else if (strcmp (coff, type_file.c_str()) == 0)
+	{
+		int_type_file = FILE_COFF;
+	} else
+	{
+		cout << "Something wrong with type of file" << endl;
+	}
+
+	file_stream >> mesh.numero_vertex;
+	file_stream >> mesh.numero_face;
+	file_stream >> dummy;
+
+	mesh.numero_color = mesh.numero_vertex;
+
+	mesh.list_vertex = (Vertex *) malloc (sizeof (Vertex) * mesh.numero_vertex);
+	mesh.list_faces = (Face *) malloc (sizeof (Face) * mesh.numero_face);
+
+	if (int_type_file == FILE_COFF)
+	{
+		mesh.list_color = (Color *) malloc (sizeof (Color) * mesh.numero_color);
+		
+		for (int i = 0; i < mesh.numero_vertex; ++i)
+		{
+			file_stream >> mesh.list_vertex[i].x;
+			file_stream >> mesh.list_vertex[i].y;
+			file_stream >> mesh.list_vertex[i].z;
+
+			file_stream >> mesh.list_color[i].red;
+			file_stream >> mesh.list_color[i].green;
+			file_stream >> mesh.list_color[i].blue;
+
+			file_stream >> dummy;
+		}
+		
+		for (int i = 0; i < mesh.numero_face; ++i)
+		{
+			file_stream >> dummy;
+			
+			file_stream >> mesh.list_faces[i].vertex_1;
+			file_stream >> mesh.list_faces[i].vertex_2;
+			file_stream >> mesh.list_faces[i].vertex_3;
+		}
+	}
+	else
+	{
+		for (int i = 0; i < mesh.numero_vertex; ++i)
+		{
+			file_stream >> mesh.list_vertex[i].x;
+			file_stream >> mesh.list_vertex[i].y;
+			file_stream >> mesh.list_vertex[i].z;
+		}
+
+		for (int i = 0; i < mesh.numero_face; ++i)
+		{
+			file_stream >> dummy;
+			
+			file_stream >> mesh.list_faces[i].vertex_1;
+			file_stream >> mesh.list_faces[i].vertex_2;
+			file_stream >> mesh.list_faces[i].vertex_3;
+		}
+	}
+	file_stream.close();
 
 	resize_mesh (mesh);
 
@@ -161,16 +157,6 @@ void bounding_box (Mesh& mesh)
 		if (mesh.z_min > mesh.list_vertex[i].z)
 			mesh.z_min = mesh.list_vertex[i].z;
 	}
-/*
-	cout << "X Max: " << mesh.x_max << "\t";
-	cout << "X Min: " << mesh.x_min << endl;
-
-	cout << "Y Max: " << mesh.y_max << "\t";
-	cout << "Y Min: " << mesh.y_min << endl;
-
-	cout << "Z Max: " << mesh.z_max << "\t";
-	cout << "Z Min: " << mesh.z_min << endl;
-*/
 }
 
 void resize_mesh (Mesh& mesh)
@@ -192,20 +178,11 @@ void resize_mesh (Mesh& mesh)
 
 	if (delta_x < delta_z && delta_y < delta_z)
 		delta_resize = delta_z;
-/*
-	cout << "Delta X: " << delta_x << endl;
-	cout << "Delta Y: " << delta_y << endl;
-	cout << "Delta Z: " << delta_z << endl;
-	cout << "Delta Resize: " << delta_resize << endl;
-*/
+
 	delta_x /= delta_resize;
 	delta_y /= delta_resize;
 	delta_z /= delta_resize;
-/*
-	cout << "Delta X: " << delta_x << endl;
-	cout << "Delta Y: " << delta_y << endl;
-	cout << "Delta Z: " << delta_z << endl;
-*/
+
 	for (int i = 0; i < mesh.numero_vertex; ++i)
 	{
 		mesh.list_vertex[i].x /= delta_resize;
@@ -298,7 +275,6 @@ void render_mesh (const Mesh& mesh)
 	}
 	glEnd();
 */
-
 	glBegin (GL_TRIANGLES);
 
 	for (int i = 0; i < mesh.numero_face; ++i)

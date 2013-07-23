@@ -1,7 +1,12 @@
 #include "game.h"
 #include "mesh.h"
 #include "timer.h"
+#include "map.h"
 #include <iostream>
+#include <fstream>
+#include <string>
+
+using namespace std;
 
 Game::Game ()
 {
@@ -15,11 +20,16 @@ Game::Game ()
 
 	bunny_file_name = "bunny.off";
 	bunny_mesh = new_mesh ();
+
+	mapa_file_name = "arquitetura.txt";
+	mapa = new_map ();
+
 }
 
 Game::~Game ()
 {
-//	del_mesh (*this->bunny_mesh);
+	del_mesh (this->bunny_mesh);
+	del_map (this->mapa);
 }
 
 int
@@ -52,12 +62,12 @@ Game::init ()
 	glMatrixMode (GL_PROJECTION);
 	glLoadIdentity ();
 
-	GLdouble left	= -1.0;
-	GLdouble right	= +1.0;
-	GLdouble bottom	= -1.0;
-	GLdouble top	= +1.0;
+	GLdouble left	= -20.0;
+	GLdouble right	= +20.0;
+	GLdouble bottom	= -13.0;
+	GLdouble top	= +13.0;
 	GLdouble zNear	= 1.0;
-	GLdouble zFar	= 3.0;
+	GLdouble zFar	= 5.0;
 
 	float eye_x		= 0.0;
 	float eye_y		= 0.0;
@@ -128,8 +138,8 @@ Game::shut_down ()
 void
 Game::load_game_resources ()
 {
-	load_mesh(*this->bunny_mesh, this->bunny_file_name);
-
+//	load_mesh(*this->bunny_mesh, this->bunny_file_name);
+	load_map(*this->mapa, this->mapa_file_name);
 	return ;
 }
 
@@ -171,19 +181,7 @@ Game::handle_event_type (SDL_Event& event)
 	case SDL_KEYDOWN:
 		handle_event_keydown (event);
 		break;
-/*
-	case SDL_KEYUP:
-		handle_event_keyup (event);
-		break;
 
-	case SDL_MOUSEBUTTONDOWN:
-		handle_event_mouse_button_down (event);
-		break;
-
-	case SDL_MOUSEBUTTONUP:
-		handle_event_mouse_button_up (event);
-		break;
-*/
 	default:
 		break;
 	}
@@ -270,7 +268,10 @@ Game::render ()
 	}
 
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	render_mesh(*bunny_mesh);
+	if (bunny_mesh != NULL)
+	{
+		render_mesh(*bunny_mesh);
+	}
 	SDL_GL_SwapBuffers();
 
 	return ;
@@ -292,6 +293,7 @@ void
 Game::release_game_resources ()
 {
 	del_mesh (this->bunny_mesh);
+	del_map (this->mapa);
 
 	return ;
 }
