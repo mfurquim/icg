@@ -20,6 +20,7 @@ public:
 	void loop ();
 	void shut_down ();
 
+
 private:
 
 	static const int SCREEN_WIDTH = 854;
@@ -41,8 +42,24 @@ private:
 	Mesh* bunny_mesh;
 
 	string mapa_file_name;
-	Map *mapa;
+	Map *mapa_architecture;
 
+	GLdouble cam_left;
+	GLdouble cam_right;
+	GLdouble cam_bottom;
+	GLdouble cam_top;
+	GLdouble cam_zNear;
+	GLdouble cam_zFar;
+
+	float cam_eye_x;
+	float cam_eye_y;
+	float cam_eye_z;
+	float cam_center_x;
+	float cam_center_y;
+	float cam_center_z;
+	float cam_up_x;
+	float cam_up_y;
+	float cam_up_z;
 
 	/*Used in Game Loop*/
 	void load_game_resources ();

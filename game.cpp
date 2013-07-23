@@ -22,14 +22,14 @@ Game::Game ()
 	bunny_mesh = new_mesh ();
 
 	mapa_file_name = "arquitetura.txt";
-	mapa = new_map ();
+	mapa_architecture = new_map ();
 
 }
 
 Game::~Game ()
 {
 	del_mesh (this->bunny_mesh);
-	del_map (this->mapa);
+	del_map (this->mapa_architecture);
 }
 
 int
@@ -62,32 +62,32 @@ Game::init ()
 	glMatrixMode (GL_PROJECTION);
 	glLoadIdentity ();
 
-	GLdouble left	= -20.0;
-	GLdouble right	= +20.0;
-	GLdouble bottom	= -13.0;
-	GLdouble top	= +13.0;
-	GLdouble zNear	= 1.0;
-	GLdouble zFar	= 5.0;
+	cam_left		= -2.0;
+	cam_right		= +2.0;
+	cam_bottom		= -2.0;
+	cam_top			= +2.0;
+	cam_zNear		= 1.0;
+	cam_zFar		= 7.0;
 
-	float eye_x		= 0.0;
-	float eye_y		= 0.0;
-	float eye_z		= 1.0;
-	float center_x	= 0.0;
-	float center_y	= 0.0;
-	float center_z	= 0.0;
-	float up_x		= 0.0;
-	float up_y		= 1.0;
-	float up_z		= 0.0;
+	cam_eye_x		= 0.0;
+	cam_eye_y		= 0.0;
+	cam_eye_z		= -3.0;
+	cam_center_x	= 0.0;
+	cam_center_y	= 0.0;
+	cam_center_z	= 0.0;
+	cam_up_x		= 0.0;
+	cam_up_y		= 1.0;
+	cam_up_z		= 0.0;
 
-	glFrustum (left, right, bottom, top, zNear, zFar);
+	glFrustum (cam_left, cam_right, cam_bottom, cam_top, cam_zNear, cam_zFar);
 
 	glMatrixMode (GL_MODELVIEW);
 	glLoadIdentity ();
 
 	gluLookAt (
-		eye_x, eye_y, eye_z,
-		center_x, center_y, center_z,
-		up_x, up_y, up_z
+		cam_eye_x, cam_eye_y, cam_eye_z,
+		cam_center_x, cam_center_y, cam_center_z,
+		cam_up_x, cam_up_y, cam_up_z
 		);
 
 	glEnable (GL_DEPTH_TEST);
@@ -138,8 +138,8 @@ Game::shut_down ()
 void
 Game::load_game_resources ()
 {
-//	load_mesh(*this->bunny_mesh, this->bunny_file_name);
-	load_map(*this->mapa, this->mapa_file_name);
+	load_mesh(*this->bunny_mesh, this->bunny_file_name);
+	load_map(*this->mapa_architecture, this->mapa_file_name);
 	return ;
 }
 
@@ -215,6 +215,25 @@ Game::handle_event_keydown (SDL_Event& event)
 	case (SDLK_p):
 		pausing_game ();
 		break;
+
+	case (SDLK_w):
+		cam_center_y	+= 1.0;
+		break;
+
+	case (SDLK_a):
+		cam_center_x	+= 1.0;
+		break;
+
+	case (SDLK_s):
+		cam_center_y	-= 1.0;
+		break;
+
+	case (SDLK_d):
+		cam_center_x	-= 1.0;
+		break;
+//	cam_center_y	= 0.0;
+//	cam_center_z	= 0.0;
+
 	}
 
 	return ;
@@ -256,6 +275,15 @@ Game::update ()
 		return ;
 	}
 
+	glMatrixMode (GL_MODELVIEW);
+	glLoadIdentity ();
+
+	gluLookAt (
+		cam_eye_x, cam_eye_y, cam_eye_z,
+		cam_center_x, cam_center_y, cam_center_z,
+		cam_up_x, cam_up_y, cam_up_z
+		);
+
 	return ;
 }
 
@@ -268,10 +296,31 @@ Game::render ()
 	}
 
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	if (bunny_mesh != NULL)
 	{
 		render_mesh(*bunny_mesh);
 	}
+
+	if (mapa_architecture != NULL)
+//		render_map(*mapa_architecture);
+/*
+	glClear (GL_COLOR_BUFFER_BIT);
+	glMatrixMode (GL_MODELVIEW);
+	glLoadIdentity ();
+//	glTranslatef (854 / 2.0, 480 / 2.0, 0.0);
+
+	glBegin (GL_QUADS );
+	
+	glColor3f (0.0, 1.0, 1.0);
+	
+	glVertex2f (-5.0, -5.0);
+	glVertex2f (5.0, -5.0);
+	glVertex2f (5.0, 5.0);
+	glVertex2f (-5.0, 5.0);
+	
+	glEnd();
+*/
 	SDL_GL_SwapBuffers();
 
 	return ;
@@ -292,8 +341,8 @@ Game::check_if_skip ()
 void
 Game::release_game_resources ()
 {
-	del_mesh (this->bunny_mesh);
-	del_map (this->mapa);
+//	del_mesh (this->bunny_mesh);
+//	del_map (this->mapa_architecture);
 
 	return ;
 }

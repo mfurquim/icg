@@ -1,4 +1,5 @@
 #include "map.h"
+#include "game.h"
 #include <cstdlib>
 #include <iostream>
 #include <fstream>
@@ -63,17 +64,24 @@ int load_map(Map& mapa, const string& mapa_file_name)
 		return -1;
 	}
 
-	cout << mapa.numero_de_linhas << " ";
-	cout << mapa.numero_de_colunas << endl;
-
-	for (int i = 0; i < mapa.numero_de_linhas; ++i)
-	{
-		for (int j = 0; j < mapa.numero_de_colunas; ++j)
-		{
-			cout << mapa.position[i][j] << " ";
-		}
-		cout << endl;
-	}
-
 	return 0;
+}
+
+void render_map (const Map& mapa)
+{
+	glClear (GL_COLOR_BUFFER_BIT);
+	glMatrixMode (GL_MODELVIEW);
+	glLoadIdentity ();
+	glTranslatef (854 / 2.0, 480 / 2.0, 0.0);
+
+	glBegin (GL_QUADS);
+	
+	glColor3f (0.0, 1.0, 1.0);
+	
+	glVertex2f (-5.0, -5.0);
+	glVertex2f (5.0, -5.0);
+	glVertex2f (5.0, 5.0);
+	glVertex2f (-5.0, 5.0);
+	
+	glEnd();
 }
