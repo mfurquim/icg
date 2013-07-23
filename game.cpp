@@ -62,16 +62,16 @@ Game::init ()
 	glMatrixMode (GL_PROJECTION);
 	glLoadIdentity ();
 
-	cam_left		= -2.0;
-	cam_right		= +2.0;
-	cam_bottom		= -2.0;
-	cam_top			= +2.0;
+	cam_left		= -1.0;
+	cam_right		= +1.0;
+	cam_bottom		= -1.0;
+	cam_top			= +1.0;
 	cam_zNear		= 1.0;
 	cam_zFar		= 7.0;
 
 	cam_eye_x		= 0.0;
 	cam_eye_y		= 0.0;
-	cam_eye_z		= -3.0;
+	cam_eye_z		= -2.0;
 	cam_center_x	= 0.0;
 	cam_center_y	= 0.0;
 	cam_center_z	= 0.0;
@@ -178,6 +178,11 @@ Game::handle_event_type (SDL_Event& event)
 		this->quit_game = true;
 		break;
 
+	case SDL_MOUSEMOTION:
+		cam_eye_x = (event.motion.x - SCREEN_WIDTH) / (SCREEN_WIDTH / 4);
+		cam_eye_y = (event.motion.y - SCREEN_HEIGHT) / (SCREEN_HEIGHT / 4);
+		break;
+
 	case SDL_KEYDOWN:
 		handle_event_keydown (event);
 		break;
@@ -216,6 +221,23 @@ Game::handle_event_keydown (SDL_Event& event)
 		pausing_game ();
 		break;
 
+/*
+	case (SDLK_w):
+		cam_eye_y		+= 0.2;
+		break;
+
+	case (SDLK_a):
+		cam_eye_x		+= 0.2;
+		break;
+
+	case (SDLK_s):
+		cam_eye_y		-= 0.2;
+		break;
+
+	case (SDLK_d):
+		cam_eye_x		-= 0.2;
+		break;
+*/
 	case (SDLK_w):
 		cam_center_y	+= 1.0;
 		break;
@@ -231,9 +253,6 @@ Game::handle_event_keydown (SDL_Event& event)
 	case (SDLK_d):
 		cam_center_x	-= 1.0;
 		break;
-//	cam_center_y	= 0.0;
-//	cam_center_z	= 0.0;
-
 	}
 
 	return ;
